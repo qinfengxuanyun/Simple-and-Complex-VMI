@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from sklearn import datasets
 from sklearn.feature_selection import SelectFromModel
 #from sklearn.linear_model import LassoCV, Lasso
@@ -52,7 +52,7 @@ original_order = ['Fp1', 'Fz', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3',
                  'C2', 'FC4', 'FT8', 'F6', 'AF8', 'AF4', 'F2', 'Iz']
 
 def get_data(sub_index=0, roi='O'):
-    data_path ="/home/qinfeng/imagery_static_angle/"
+    data_path = "./grating_VMI_data/"
     path = data_path + f"event_data_{F_L}-{F_H}_6s_128_bs/"
     csv_path = data_path + "data_all.csv"
     data = pd.read_csv(csv_path).values.tolist()
@@ -96,7 +96,7 @@ def get_data(sub_index=0, roi='O'):
     return X_list, y_list
 
 #################################################
-outdir = "stats/imagery_tgm-roi_sub2/"
+outdir = "stats/imagery_tgm-roi_sub/"
 os.system("mkdir -p {}".format(outdir))
 T_L =  0
 T_H = 1.2

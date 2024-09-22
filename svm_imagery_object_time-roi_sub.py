@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from sklearn import datasets
 from sklearn.feature_selection import SelectFromModel
 #from sklearn.linear_model import LassoCV, Lasso
@@ -52,7 +52,7 @@ original_order = ['Fp1', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3', 'T7',
                   'FC4', 'FT8', 'F6', 'F2', 'AF4', 'AF8']
 
 def get_data(sub_index=0,  roi='O'):
-    data_path="/home/qinfeng/imagery_cb/"
+    data_path="./object_VMI_data/"
     path = data_path+f"event_data_{F_L}-{F_H}_128/" 
     subject_list = []
     for file in os.listdir(path):
@@ -95,12 +95,12 @@ def get_data(sub_index=0,  roi='O'):
         
     return np.array(X_list),np.array(y_list)                  
 
-#################################################
-outdir = "stats/imagerycb_time-roi_sub/"
+#####################SVM Temporal Classifer Train and Test############################
+outdir = "stats/imagery_object_time-roi_sub/"
 os.system("mkdir -p {}".format(outdir))
 T_L = -0.2
 T_H = 1.5
-output_file = f"{F_L}-{F_H}_imagerycb_time_cls_{T_L}-{T_H}_{roi}_sub.csv"
+output_file = f"{F_L}-{F_H}_imagery_object_time_cls_{T_L}-{T_H}_{roi}_sub.csv"
 
 feature_select = 0
 tol = 0.01
@@ -178,12 +178,12 @@ os.system("touch {}".format(outdir+output_file))
 df.to_csv(outdir+output_file,sep=',',index=False)
 
 #################################################
-# task = "imagerycb"
-# outdir = "stats/imagerycb_time-roi/"
+# task = "imagery_object"
+# outdir = "stats/imagery_object_time-roi/"
 # os.system("mkdir -p {}".format(outdir))
 # colors = ['b', 'g', 'r', 'c']
 # for index, roi in enumerate(['Visual', 'Auditory']):
-#     file =  f"stats/imagerycb_time-roi/{F_L}-{F_H}_imagerycb_time_cls_-0.2-1.5_{roi}.csv"
+#     file =  f"stats/imagery_object_time-roi/{F_L}-{F_H}_imagery_object_time_cls_-0.2-1.5_{roi}.csv"
 #     data = pd.read_csv(file).values[:,1].tolist()
 #     data = np.array([[float(item) for item in row[1:-1].split(",")] for row in data])
 #     data_mean = np.mean(data,axis=1)
@@ -192,7 +192,7 @@ df.to_csv(outdir+output_file,sep=',',index=False)
 #     plt.plot(time_s,data_mean, color=colors[index],label=roi) #navy
 #     plt.fill_between(time_s, data_mean - data_std, data_mean + data_std, color=colors[index], alpha=0.2)
     
-# # 绘制chance level线
+# # plot chance level line
 # channel_level = 1/12#get_channel_level(int(file.split(".")[0].split("_")[-1]))
 # stim_time = 0
 # plt.axhline(y=channel_level, color='black', linestyle='--')

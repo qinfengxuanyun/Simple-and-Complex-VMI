@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from sklearn import datasets
 from sklearn.feature_selection import SelectFromModel
 #from sklearn.linear_model import LassoCV, Lasso
@@ -42,7 +42,7 @@ original_order = ['Fp1', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3', 'T7',
                   'FC4', 'FT8', 'F6', 'F2', 'AF4', 'AF8']
 
 def get_data(sub_index=0):
-    data_path="/home/qinfeng/imagery_cb/"
+    data_path = "./object_VMI_data/"
     path = data_path+f"event_data_{F_L}-{F_H}_128/" 
     subject_list = []
     for file in os.listdir(path):
@@ -83,9 +83,9 @@ def get_data(sub_index=0):
     return X_list,y_list
            
 #################################################
-outdir = "stats/imagerycb_sub/"
+outdir = "stats/imagery_object_sub/"
 os.system("mkdir -p {}".format(outdir))
-output_file = f"{F_L}-{F_H}_imagerycb_cls_{T_L}-{T_H}_sub.csv"
+output_file = f"{F_L}-{F_H}_imagery_object_cls_{T_L}-{T_H}_sub.csv"
 
 feature_select = 0
 tol = 0.01

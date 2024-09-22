@@ -55,7 +55,7 @@ original_order = ['Fp1', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3', 'T7',
                   'FC4', 'FT8', 'F6', 'F2', 'AF4', 'AF8']
 
 def get_data_fc(sub_index=0,  time_range=[0,0.6]):
-    data_path="/home/qinfeng/imagery_cb/"
+    data_path="./object_VMI_data/"
     path = data_path+f"event_data_{F_L}-{F_H}_128/" 
     subject_list = []
     for file in os.listdir(path):
@@ -93,87 +93,34 @@ def get_data_fc(sub_index=0,  time_range=[0,0.6]):
     return X,y
 
 ###############compute  fc##################################
-# outdir = "stats/imagerycb_time-fc_sub/"
-# roi_list = ['O','C','T','F']
-# # 颜色映射
-# group_color = {
-#     'O': 'steelblue',
-#     'T': 'darkseagreen',
-#     'C': 'r',
-#     'F': 'darkgoldenrod'
-# }
-# os.system("mkdir -p {}".format(outdir))
-# for time in range(-1,6,1):
-#     T_L = np.round(1.0*time/10,1)
-#     T_H = np.round(1.0*time/10+0.1,1)
-#     print(f"{T_L}-{T_H}s")
-#     stats_list = []
-#     for  sub_index in range(36):
-#         X, y = get_data_fc(sub_index=sub_index,time_range=[T_L,T_H])
-#         X_mean = np.mean(X,axis=0)
-#         stats_list.append(X_mean)
-#     np.save(outdir+f"imagerycb_{F_L}-{F_H}_{T_L}_{T_H}_fc.npy",np.array(stats_list))
+outdir = "stats/imagery_object_time-fc_sub/"
+roi_list = ['O','C','T','F']
+group_color = {
+    'O': 'steelblue',
+    'T': 'darkseagreen',
+    'C': 'r',
+    'F': 'darkgoldenrod'
+}
+os.system("mkdir -p {}".format(outdir))
+for time in range(-1,6,1):
+    T_L = np.round(1.0*time/10,1)
+    T_H = np.round(1.0*time/10+0.1,1)
+    print(f"{T_L}-{T_H}s")
+    stats_list = []
+    for  sub_index in range(36):
+        X, y = get_data_fc(sub_index=sub_index,time_range=[T_L,T_H])
+        X_mean = np.mean(X,axis=0)
+        stats_list.append(X_mean)
+    np.save(outdir+f"imagery_object_{F_L}-{F_H}_{T_L}_{T_H}_fc.npy",np.array(stats_list))
 
-# ###############t-test fc##################################
-# outdir = "stats/imagerycb_time-fc_sub/"
-# fc_list = []
-# for time in range(-1,6,1):
-#     T_L = np.round(1.0*time/10,1)
-#     T_H = np.round(T_L + 0.1,1)
-#     data = np.load(outdir+f"imagerycb_{F_L}-{F_H}_{T_L}_{T_H}_fc.npy")
-#     fc_list.append(data)
-
-# roi_list = ['O','T','C','F']
-# ch_index_list = []
-# ch_list = []
-# for roi in roi_list:
-#     ch_index_list += [original_order.index(ch) for ch in  roi_dict[roi]]
-#     ch_list += [ch for ch in  roi_dict[roi]]
-
-# t_array = np.zeros((len(ch_index_list),len(ch_index_list)))
-# p_array = np.zeros((len(ch_index_list),len(ch_index_list)))
-# for index in range(len(ch_index_list)):
-#     for index2 in range(len(ch_index_list)):
-#         group_list = []
-#         for time_index in range(7):
-#             group_list.append(fc_list[time_index][:,index,index2])
-#         # f_stat, p_value = stats.f_oneway(group_list[0], group_list[1], group_list[2],group_list[3], group_list[4], group_list[5], group_list[6])
-#         t_stat, p_value = ttest_ind(group_list[0], group_list[2])
-#         t_array[index,index2] = t_stat
-#         p_array[index,index2] = p_value
-# t_array = np.nan_to_num(t_array, nan=0)
-# p_array = np.nan_to_num(p_array, nan=1)
-# np.save(outdir+f"imagerycb_{F_L}-{F_H}_fc_tvalue.npy", t_array)
-# np.save(outdir+f"imagerycb_{F_L}-{F_H}_fc_pvalue.npy", p_array)
-
-# t_array = np.load(outdir+f"imagerycb_{F_L}-{F_H}_fc_tvalue.npy")
-# p_array = np.load(outdir+f"imagerycb_{F_L}-{F_H}_fc_pvalue.npy")
-
-# # 绘制热力图
-# fontsize = 20
-# sns.set(font_scale=1.2)
-# plt.figure(figsize=(len(ch_list), len(ch_list))) #
-
-# p_array = np.flipud(p_array)
-# # mask = p_array < 0.05
-# # p_array = -1.0 * np.log10(p_array) #* mask
-# ch_list2  = list(reversed(ch_list))
-
-# ax=sns.heatmap(p_array, vmin=0.01, vmax=0.1, annot=False, cmap='jet_r', square=True, xticklabels=ch_list, yticklabels=ch_list2,cbar_kws={'shrink': 0.5})
-# ax.tick_params(axis='x', labelsize=fontsize)  # 设置x轴标签的字体大小
-# ax.tick_params(axis='y', labelsize=fontsize)  # 设置y轴标签的字体大小
-# plt.yticks(rotation=0)
-# cbar = ax.collections[0].colorbar
-# cbar.set_ticks([i/100 for i in range(1,11,2)])  # 设置具体的刻度值
-# # 设置颜色条标签的字体大小
-# cbar.ax.tick_params(labelsize=fontsize)  # 设置字体大小为12
-# plt.savefig(outdir+f"imagerycb_{F_L}-{F_H}_fc_-logp_value.png")
-# print("finished")
-
-#######print fc p-value######
-outdir = "stats/imagerycb_time-fc_sub/"
-t_array = np.load(outdir+f"imagerycb_{F_L}-{F_H}_fc_tvalue.npy")
-p_array = np.load(outdir+f"imagerycb_{F_L}-{F_H}_fc_pvalue.npy")
+###############t-test fc##################################
+outdir = "stats/imagery_object_time-fc_sub/"
+fc_list = []
+for time in range(-1,6,1):
+    T_L = np.round(1.0*time/10,1)
+    T_H = np.round(T_L + 0.1,1)
+    data = np.load(outdir+f"imagery_object_{F_L}-{F_H}_{T_L}_{T_H}_fc.npy")
+    fc_list.append(data)
 
 roi_list = ['O','T','C','F']
 ch_index_list = []
@@ -182,5 +129,55 @@ for roi in roi_list:
     ch_index_list += [original_order.index(ch) for ch in  roi_dict[roi]]
     ch_list += [ch for ch in  roi_dict[roi]]
 
-print("t-value: ", t_array[ch_list.index('FC2'),ch_list.index('T8')])
-print("p-value: ", p_array[ch_list.index('FC2'),ch_list.index('T8')])
+t_array = np.zeros((len(ch_index_list),len(ch_index_list)))
+p_array = np.zeros((len(ch_index_list),len(ch_index_list)))
+for index in range(len(ch_index_list)):
+    for index2 in range(len(ch_index_list)):
+        group_list = []
+        for time_index in range(7):
+            group_list.append(fc_list[time_index][:,index,index2])
+        # f_stat, p_value = stats.f_oneway(group_list[0], group_list[1], group_list[2],group_list[3], group_list[4], group_list[5], group_list[6])
+        t_stat, p_value = ttest_ind(group_list[0], group_list[2])
+        t_array[index,index2] = t_stat
+        p_array[index,index2] = p_value
+t_array = np.nan_to_num(t_array, nan=0)
+p_array = np.nan_to_num(p_array, nan=1)
+np.save(outdir+f"imagery_object_{F_L}-{F_H}_fc_tvalue.npy", t_array)
+np.save(outdir+f"imagery_object_{F_L}-{F_H}_fc_pvalue.npy", p_array)
+
+t_array = np.load(outdir+f"imagery_object_{F_L}-{F_H}_fc_tvalue.npy")
+p_array = np.load(outdir+f"imagery_object_{F_L}-{F_H}_fc_pvalue.npy")
+
+fontsize = 20
+sns.set(font_scale=1.2)
+plt.figure(figsize=(len(ch_list), len(ch_list))) #
+
+p_array = np.flipud(p_array)
+# mask = p_array < 0.05
+# p_array = -1.0 * np.log10(p_array) #* mask
+ch_list2  = list(reversed(ch_list))
+
+ax=sns.heatmap(p_array, vmin=0.01, vmax=0.1, annot=False, cmap='jet_r', square=True, xticklabels=ch_list, yticklabels=ch_list2,cbar_kws={'shrink': 0.5})
+ax.tick_params(axis='x', labelsize=fontsize)
+ax.tick_params(axis='y', labelsize=fontsize)
+plt.yticks(rotation=0)
+cbar = ax.collections[0].colorbar
+cbar.set_ticks([i/100 for i in range(1,11,2)])
+cbar.ax.tick_params(labelsize=fontsize)
+plt.savefig(outdir+f"imagery_object_{F_L}-{F_H}_fc_-logp_value.png")
+print("finished")
+
+#######print fc p-value######
+# outdir = "stats/imagery_object_time-fc_sub/"
+# t_array = np.load(outdir+f"imagery_object_{F_L}-{F_H}_fc_tvalue.npy")
+# p_array = np.load(outdir+f"imagery_object_{F_L}-{F_H}_fc_pvalue.npy")
+#
+# roi_list = ['O','T','C','F']
+# ch_index_list = []
+# ch_list = []
+# for roi in roi_list:
+#     ch_index_list += [original_order.index(ch) for ch in  roi_dict[roi]]
+#     ch_list += [ch for ch in  roi_dict[roi]]
+#
+# print("t-value: ", t_array[ch_list.index('FC2'),ch_list.index('T8')])
+# print("p-value: ", p_array[ch_list.index('FC2'),ch_list.index('T8')])

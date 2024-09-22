@@ -3,6 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="7c67318d-f8ca-4085-9d13-1ce5608069aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bio_cls_plot_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/bio_cls_plot_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bio_imagery_fc_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/bio_imagery_fc_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bio_imagerycb_fc_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/bio_imagery_object_fc_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_eeg_event_data_Grating_VMI.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_eeg_event_data_grating_VMI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_eeg_event_data_Object_VMI.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_eeg_event_data_object_VMI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagery_ch_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_ch_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagery_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagery_tgm-roi_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_tgm-roi_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagery_time-roi_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_time-roi_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagerycb_ch_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_object_ch_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagerycb_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_object_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagerycb_tgm-roi_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_object_tgm-roi_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/svm_imagerycb_time-roi_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/svm_imagery_object_time-roi_sub.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +41,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../MRI_pipline" />
   </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -74,5 +87,21 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/svm_imagery_ch_sub.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/svm_imagery_object_time-roi_sub.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from sklearn import datasets
 from sklearn.feature_selection import SelectFromModel
 #from sklearn.linear_model import LassoCV, Lasso
@@ -41,7 +41,7 @@ original_order = ['Fp1', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3', 'T7',
                   'FC4', 'FT8', 'F6', 'F2', 'AF4', 'AF8']
 
 def get_data(sub_index=0,  channel='Fp1'):
-    data_path="/home/qinfeng/imagery_cb/"
+    data_path="./object_VMI_data/"
     path = data_path+f"event_data_{F_L}-{F_H}_128/" 
     subject_list = []
     for file in os.listdir(path):
@@ -85,8 +85,8 @@ def get_data(sub_index=0,  channel='Fp1'):
     # return np.array(X_list),np.array(y_list)       
     return X_list,y_list
            
-#################################################
-outdir = "stats/imagerycb_ch_sub/"
+###################SVM Spatial Classifer Train and Test##############################
+outdir = "stats/imagery_object_ch_sub/"
 os.system("mkdir -p {}".format(outdir))
 output_file = f"{F_L}-{F_H}_imagery_ch_cls_{T_L}-{T_H}_sub.csv"
 
@@ -153,44 +153,19 @@ df = pd.DataFrame(stats_list,columns=['ch','acc','auc'])
 os.system("touch {}".format(outdir+output_file))
 df.to_csv(outdir+output_file,sep=',',index=False)
 
-#################################################
-# for F_L,F_H in [[0.5,4],[4,8],[8,13],[13,30],[30,40]]:
-#     outdir = "stats/imagerycb_ch/"
-#     os.system("mkdir -p {}".format(outdir))
-#     task = "imagery"
-#     file =  f"stats/imagerycb_ch_sub/{F_L}-{F_H}_imagery_ch_cls_0-1.5_sub.csv"
-#     file2 =  f"stats/imagerycb_ch_sub/{F_L}-{F_H}_imagery_ch_cls_0-1.5_mean_sub.csv"
-#     channels = pd.read_csv(file).values[:,0].tolist()
-#     acc_data = pd.read_csv(file).values[:,1].tolist()
-#     acc_data = np.array([[float(item) for item in row[1:-1].split(",")] for row in acc_data])
-#     acc_mean = np.mean(acc_data,axis=1).tolist()
-#     data = [[i,j] for i,j in zip(channels,acc_mean)]
-#     df = pd.DataFrame(data,columns=['ch','acc'])
-#     os.system("touch {}".format(file2))
-#     df.to_csv(file2,sep=',',index=False)
+####################Spatial Mean Decoding Acc Compute#############################
+for F_L,F_H in [[0.5,4],[4,8],[8,13],[13,30],[30,40]]:
+    outdir = "stats/imagery_object_ch/"
+    os.system("mkdir -p {}".format(outdir))
+    task = "imagery"
+    file =  f"stats/imagery_object_ch_sub/{F_L}-{F_H}_imagery_ch_cls_0-1.5_sub.csv"
+    file2 =  f"stats/imagery_object_ch_sub/{F_L}-{F_H}_imagery_ch_cls_0-1.5_mean_sub.csv"
+    channels = pd.read_csv(file).values[:,0].tolist()
+    acc_data = pd.read_csv(file).values[:,1].tolist()
+    acc_data = np.array([[float(item) for item in row[1:-1].split(",")] for row in acc_data])
+    acc_mean = np.mean(acc_data,axis=1).tolist()
+    data = [[i,j] for i,j in zip(channels,acc_mean)]
+    df = pd.DataFrame(data,columns=['ch','acc'])
+    os.system("touch {}".format(file2))
+    df.to_csv(file2,sep=',',index=False)
 
-#################################################
-# task = "imagerycb"
-# file =  f"stats/imagerycb_ch/{F_L}-{F_H}_imagery_ch_cls_-0.2-2.5.csv"
-
-# data = pd.read_csv(file).values[:,1].tolist()
-# data = np.array([[float(item) for item in row[1:-1].split(",")] for row in data])
-# data = np.mean(data,axis=1)
-
-# print([[original_order[i], data[i]] for i in np.argsort(data)[::-1].tolist()])
-
-# data_max = np.max(data)
-# data_min = np.min(data)
-# data = (data - data_min) / (data_max - data_min)
-# print("max: ", data_max)
-# print("min: ", data_min)
-
-
-# montage = mne.channels.make_standard_montage('standard_1020')
-# # temp = montage.ch_names
-# # print(temp)
-# info = mne.create_info(ch_names=original_order, sfreq=1024, ch_types='eeg')
-# info.set_montage(montage)
-# fig, ax = plt.subplots()
-# mne.viz.plot_topomap(data, info, names=original_order, axes=ax,cmap="rainbow", vlim=(0,1.0)) #Reds
-# plt.savefig(f"{task}_ch_acc.png")

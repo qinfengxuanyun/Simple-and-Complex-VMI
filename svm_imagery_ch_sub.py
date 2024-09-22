@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from sklearn import datasets
 from sklearn.feature_selection import SelectFromModel
 #from sklearn.linear_model import LassoCV, Lasso
@@ -41,7 +41,7 @@ original_order = ['Fp1', 'Fz', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3',
                  'C2', 'FC4', 'FT8', 'F6', 'AF8', 'AF4', 'F2', 'Iz']
 
 def get_data(sub_index=0, channel='Fp1'):
-    data_path ="/home/qinfeng/imagery_static_angle/"
+    data_path ="./grating_VMI_data/"
     path = data_path + f"event_data_{F_L}-{F_H}_6s_128_bs/"
     csv_path = data_path + "data_all.csv"
     data = pd.read_csv(csv_path).values.tolist()
@@ -77,7 +77,7 @@ def get_data(sub_index=0, channel='Fp1'):
     
     return X_list,y_list
 
-#################################################
+#####################SVM Spatial Classifer Train and Test############################
 outdir = "stats/imagery_ch_sub/"
 os.system("mkdir -p {}".format(outdir))
 output_file = f"{F_L}-{F_H}_imagery6s_ch_cls_{T_L}-{T_H}_sub.csv"
@@ -88,7 +88,6 @@ alpha = 10**(-2.7)
 stats_list = []
 
 for  channel in original_order:
-    # channel = 'Fp1'
     print(channel)
     acc_scores = []
     auc_scores = []
@@ -147,44 +146,18 @@ df = pd.DataFrame(stats_list,columns=['ch','acc','auc'])
 os.system("touch {}".format(outdir+output_file))
 df.to_csv(outdir+output_file,sep=',',index=False)
 
-#################################################
-# for F_L,F_H in [[0.5,4],[4,8],[8,13],[13,30],[30,40]]:
-#     outdir = "stats/imagery_ch_sub/"
-#     os.system("mkdir -p {}".format(outdir))
-#     task = "imagery"
-#     file =  f"stats/imagery_ch_sub/{F_L}-{F_H}_imagery6s_ch_cls_0-1.5_sub.csv"
-#     file2 =  f"stats/imagery_ch_sub/{F_L}-{F_H}_imagery6s_ch_cls_0-1.5_mean_sub.csv"
-#     channels = pd.read_csv(file).values[:,0].tolist()
-#     acc_data = pd.read_csv(file).values[:,1].tolist()
-#     acc_data = np.array([[float(item) for item in row[1:-1].split(",")] for row in acc_data])
-#     acc_mean = np.mean(acc_data,axis=1).tolist()
-#     data = [[i,j] for i,j in zip(channels,acc_mean)]
-#     df = pd.DataFrame(data,columns=['ch','acc'])
-#     os.system("touch {}".format(file2))
-#     df.to_csv(file2,sep=',',index=False)
-
-#################################################
-task = "imagery"
-file =  f"stats/imagery_ch_sub/{F_L}-{F_H}_imagery6s_ch_cls_0-1.5_sub.csv"
-
-data = pd.read_csv(file).values[:,1].tolist()
-data = np.array([[float(item) for item in row[1:-1].split(",")] for row in data])
-data = np.mean(data,axis=1)
-
-print([[original_order[i], data[i]] for i in np.argsort(data)[::-1].tolist()])
-
-data_max = np.max(data)
-data_min = np.min(data)
-data = (data - data_min) / (data_max - data_min)
-print("max: ", data_max)
-print("min: ", data_min)
-
-
-montage = mne.channels.make_standard_montage('standard_1020')
-# temp = montage.ch_names
-# print(temp)
-info = mne.create_info(ch_names=original_order, sfreq=1024, ch_types='eeg')
-info.set_montage(montage)
-fig, ax = plt.subplots()
-mne.viz.plot_topomap(data, info, names=original_order, axes=ax,cmap="rainbow", vlim=(0,1.0)) #Reds
-plt.savefig(f"{task}_ch_acc.png")
+#####################Spatial Mean Decoding Acc Compute############################
+for F_L,F_H in [[0.5,4],[4,8],[8,13],[13,30],[30,40]]:
+    outdir = "stats/imagery_ch_sub/"
+    os.system("mkdir -p {}".format(outdir))
+    task = "imagery"
+    file =  f"stats/imagery_ch_sub/{F_L}-{F_H}_imagery6s_ch_cls_0-1.5_sub.csv"
+    file2 =  f"stats/imagery_ch_sub/{F_L}-{F_H}_imagery6s_ch_cls_0-1.5_mean_sub.csv"
+    channels = pd.read_csv(file).values[:,0].tolist()
+    acc_data = pd.read_csv(file).values[:,1].tolist()
+    acc_data = np.array([[float(item) for item in row[1:-1].split(",")] for row in acc_data])
+    acc_mean = np.mean(acc_data,axis=1).tolist()
+    data = [[i,j] for i,j in zip(channels,acc_mean)]
+    df = pd.DataFrame(data,columns=['ch','acc'])
+    os.system("touch {}".format(file2))
+    df.to_csv(file2,sep=',',index=False)

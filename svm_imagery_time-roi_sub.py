@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from sklearn import datasets
 from sklearn.feature_selection import SelectFromModel
 #from sklearn.linear_model import LassoCV, Lasso
@@ -51,7 +51,7 @@ original_order = ['Fp1', 'Fz', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3',
                  'C2', 'FC4', 'FT8', 'F6', 'AF8', 'AF4', 'F2', 'Iz']
 
 def get_data(sub_index=0, roi='O'):
-    data_path ="/home/qinfeng/imagery_static_angle/"
+    data_path = "./grating_VMI_data/"
     path = data_path + f"event_data_{F_L}-{F_H}_6s_128_bs/"
     csv_path = data_path + "data_all.csv"
     data = pd.read_csv(csv_path).values.tolist()
@@ -94,7 +94,7 @@ def get_data(sub_index=0, roi='O'):
     
     return X_list, y_list
 
-#################################################
+#####################SVM Temporal Classifer Train and Test############################
 outdir = "stats/imagery_time-roi_sub/"
 os.system("mkdir -p {}".format(outdir))
 T_L = -0.2
@@ -192,7 +192,7 @@ df.to_csv(outdir+output_file,sep=',',index=False)
 #     plt.plot(time_s,data_mean, color=colors[index],label=roi) #navy
 #     plt.fill_between(time_s, data_mean - data_std, data_mean + data_std, color=colors[index], alpha=0.2)
     
-# # 绘制chance level线
+# # plor chance level line
 # channel_level = 0.5#get_channel_level(int(file.split(".")[0].split("_")[-1]))
 # stim_time = 0
 # plt.axhline(y=channel_level, color='black', linestyle='--')

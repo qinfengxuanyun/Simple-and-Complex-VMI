@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from sklearn import datasets
 from sklearn.feature_selection import SelectFromModel
 #from sklearn.linear_model import LassoCV, Lasso
@@ -53,7 +53,7 @@ original_order = ['Fp1', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3', 'T7',
                   'FC4', 'FT8', 'F6', 'F2', 'AF4', 'AF8']
 
 def get_data(sub_index=0,  roi='O'):
-    data_path="/home/qinfeng/imagery_cb/"
+    data_path="./object_VMI_data/"
     path = data_path+f"event_data_{F_L}-{F_H}_128/" 
     subject_list = []
     for file in os.listdir(path):
@@ -97,7 +97,7 @@ def get_data(sub_index=0,  roi='O'):
     return np.array(X_list),np.array(y_list)                  
 
 #################################################
-outdir = "stats/imagerycb_tgm-roi_sub2/"
+outdir = "stats/imagery_object_tgm-roi_sub/"
 os.system("mkdir -p {}".format(outdir))
 T_L =  0
 T_H = 1.2
@@ -143,6 +143,6 @@ for  sub_index in range(SUB_NUM):
     test_acc_score_array += test_acc_score_array_now / FOLD_NUM
     test_auc_score_array += test_auc_score_array_now / FOLD_NUM      
     
-np.save(outdir+ f"{F_L}-{F_H}_imagerycb_time_cls_{T_L}-{T_H}_{roi}_acc.npy", test_acc_score_array/SUB_NUM)
-np.save(outdir+f"{F_L}-{F_H}_imagerycb_time_cls_{T_L}-{T_H}_{roi}_auc.npy", test_auc_score_array/SUB_NUM)
+np.save(outdir+ f"{F_L}-{F_H}_imagery_object_time_cls_{T_L}-{T_H}_{roi}_acc.npy", test_acc_score_array/SUB_NUM)
+np.save(outdir+f"{F_L}-{F_H}_imagery_object_time_cls_{T_L}-{T_H}_{roi}_auc.npy", test_auc_score_array/SUB_NUM)
         

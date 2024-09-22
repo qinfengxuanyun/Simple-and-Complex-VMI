@@ -41,8 +41,8 @@ original_order = ['Fp1', 'Fz', 'F3', 'F7', 'FT9', 'FC5', 'FC1', 'C3',
                  'PO4', 'PO8', 'P6', 'P2', 'CPz', 'CP4', 'TP8', 'C6', 
                  'C2', 'FC4', 'FT8', 'F6', 'AF8', 'AF4', 'F2', 'Iz']
 
-def get_data(sub_index=0, channel='Fp1'):
-    data_path ="/home/qinfeng/imagery_static_angle/"
+def get_data(sub_index=0):
+    data_path = "./grating_VMI_data/"
     path = data_path + f"event_data_{F_L}-{F_H}_6s_128_bs/"
     csv_path = data_path + "data_all.csv"
     data = pd.read_csv(csv_path).values.tolist()
@@ -78,7 +78,7 @@ def get_data(sub_index=0, channel='Fp1'):
     
     return X_list, y_list
 
-#################################################
+###################SVM Classifer Train and Test##############################
 outdir = "stats/imagery_sub/"
 os.system("mkdir -p {}".format(outdir))
 output_file = f"{F_L}-{F_H}_imagery6s_cls_{T_L}-{T_H}_sub.csv"
